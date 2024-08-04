@@ -1,25 +1,24 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-import dotenv from "dotenv";
-import { findRootDirectory } from "./path";
+import dotenv from 'dotenv';
+
+import { findRootDirectory } from './path';
 
 // Load .env file based on ENV variable
 function loadEnvFile() {
   const currentEnv = process.env.ENV?.trim();
   let envFile = null;
 
-  if (currentEnv === "prod") {
-    envFile = ".env.prod";
-  } else if (currentEnv === "test") {
-    envFile = ".env.test";
-  } else if (currentEnv === "dev") {
-    envFile = ".env.dev";
+  if (currentEnv === 'prod') {
+    envFile = '.env.prod';
+  } else if (currentEnv === 'test') {
+    envFile = '.env.test';
+  } else if (currentEnv === 'dev') {
+    envFile = '.env.dev';
   } else {
-    console.warn(
-      "⚙️ No matching environment found, falling back to .env.dev file."
-    );
-    envFile = ".env.dev";
+    console.warn('⚙️ No matching environment found, falling back to .env.dev file.');
+    envFile = '.env.dev';
   }
 
   const envFilePath = path.resolve(path.join(findRootDirectory(), envFile));
