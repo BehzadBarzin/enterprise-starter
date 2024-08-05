@@ -10,24 +10,31 @@ import { requestLogger } from './middlewares/request-logger.middleware';
 export async function createServer() {
   const app: Express = express();
 
+  // ---------------------------------------------------------------------------
+  // Middlewares
+  // ---------------------------------------------------------------------------
   // Serve static files
   app.use(express.static('public'));
 
   // Parse JSON request bodies
   app.use(json());
 
+  // ---------------------------------------------------------------------------
+  // Custom Middlewares
+  // ---------------------------------------------------------------------------
   // Setup request logger
   app.use(requestLogger);
 
+  // ---------------------------------------------------------------------------
+  // Add custom routes here
+  // ---------------------------------------------------------------------------
   app.get('/', (req: Request, res: Response) => {
     throw new NotFoundError();
   });
 
   // ---------------------------------------------------------------------------
-  // Add custom routes here
   // ---------------------------------------------------------------------------
-
-  // ---------------------------------------------------------------------------
+  // Error handling
   // ---------------------------------------------------------------------------
   // Catch all unhandled routes and forward to error handler
   app.all('*', (req, res) => {
