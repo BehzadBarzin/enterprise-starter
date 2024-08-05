@@ -3,6 +3,7 @@ import path from 'path';
 
 import dotenv from 'dotenv';
 
+import { logger } from './logger';
 import { findRootDirectory } from './path';
 
 // Load .env file based on ENV variable
@@ -17,7 +18,7 @@ function loadEnvFile() {
   } else if (currentEnv === 'dev') {
     envFile = '.env.dev';
   } else {
-    console.warn('⚙️ No matching environment found, falling back to .env.dev file.');
+    logger.warn('⚙️ No matching environment found, falling back to .env.dev file.');
     envFile = '.env.dev';
   }
 
@@ -25,11 +26,11 @@ function loadEnvFile() {
 
   // Check if the file exists before attempting to load it
   if (!fs.existsSync(envFilePath) || envFile === null) {
-    console.error(`❌ Error: File ${envFile} not found.`);
+    logger.error(`Error: File ${envFile} not found.`);
     process.exit(1); // Exit with error
   } else {
     dotenv.config({ path: envFilePath });
-    console.log(`⚙️ Using ${envFile} for environment configuration.`);
+    logger.info(`⚙️  Using ${envFile} for environment configuration.`);
   }
 }
 

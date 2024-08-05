@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { logger } from './logger';
+
 // -----------------------------------------------------------------------------
 // ESM Module doesn't provide these variables in the global context
 // ⚠️ if in package.json "type": "module" is set and compiling TS to ESM syntax, enable below lines
@@ -22,7 +24,7 @@ export function findRootDirectory() {
   while (true) {
     // Check if we've reached the root directory
     if (path.dirname(currentDir) === currentDir) {
-      console.error('❌ Project root not found.');
+      logger.error('Project root not found.');
       process.exit(1); // Exit with error
     }
 
