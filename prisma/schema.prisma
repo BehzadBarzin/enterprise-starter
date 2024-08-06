@@ -10,7 +10,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Test {
-  id       Int       @id @default(autoincrement())
-  text String
+// =============================================================================
+// Auth Tables
+// =============================================================================
+
+model User {
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  provider             String
+  password             String?
+  confirmationToken    String?
+  confirmed            Boolean   @default(false)
+  blocked              Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  roles                Role[] @relation("UserRoles") // Many-to-Many
+  apiTokens ApiToken[]
+  passwordResetTokens PasswordResetToken[]
+  
+  
+  @@map("users")
 }
+
+model PasswordResetToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  expiration  DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
+
+  @@map("password_reset_tokens")
+}
+
+model Role {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  users       User[]    @relation("UserRoles") // Many-to-Many
+  permissions Permission[] @relation("RolePermissions") // Many-to-Many
+
+  @@map("roles")
+}
+
+model Permission {
+  id        Int       @id @default(autoincrement())
+  action    String    @unique
+  description String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  roles     Role[]    @relation("RolePermissions") // Many-to-Many
+  apiTokens ApiToken[] @relation("ApiTokenPermissions") // Many-to-Many
+
+  @@map("permissions")
+}
+
+model ApiToken {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  fullAccess  Boolean   @default(false)
+  token   String    @unique
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  hide Boolean @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  permissions Permission[] @relation("ApiTokenPermissions") // Many-to-Many
+  // User that created the api token (must be a super-admin)
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
+
+
+  @@map("api_tokens")
+}
+
+
+// =============================================================================
+// API Tables
+// =============================================================================
