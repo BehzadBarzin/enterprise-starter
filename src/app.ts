@@ -1,3 +1,5 @@
+import 'reflect-metadata'; // Import this before any other imports (used by class-transformer)
+
 import express, { Express, Request, Response, json } from 'express';
 import 'express-async-errors'; // Must be imported at the beg
 

@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsDecimal } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 /**
  * A common DTO class used to validate req.params of routes that require an ID.
@@ -6,7 +7,7 @@ import { IsNotEmpty, IsNumber, IsDecimal } from 'class-validator';
  * Example: /.../:id/...
  */
 export class IdParamsDTO {
-  @IsDecimal()
+  @Type(() => Number) // Because params are strings, we must explicitly parse them using class-transformer
   @IsNumber()
   @IsNotEmpty()
   id: number;
