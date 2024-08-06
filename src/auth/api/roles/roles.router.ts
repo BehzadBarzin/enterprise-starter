@@ -1,4 +1,4 @@
-import express, { Application, Router } from 'express';
+import express, { Router } from 'express';
 
 import authorize from '../../middlewares/authorize';
 import { registerAction } from '../../utils/register-permission-action';
@@ -6,32 +6,30 @@ import { registerAction } from '../../utils/register-permission-action';
 import RolesController from './roles.controller';
 
 /**
- * Registers routes for roles API in the given Express application.
- *
- * @param app - The Express application instance.
+ * Get routes for roles API in the given Express application.
  */
-export async function registerRolesRouter(app: Application): Promise<void> {
+export async function getRolesRouter(): Promise<Router> {
   const router: Router = express.Router();
   const rolesController = new RolesController();
 
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // RESTful routes
-  router.get('/', authorize('roles.getAllRoles'), rolesController.getAllRoles);
+  router.get('/roles/', authorize('roles.getAllRoles'), rolesController.getAllRoles);
   await registerAction('roles.getAllRoles', 'Get all roles');
   // ---------------------------------------------------------------------------
-  router.get('/:id', authorize('roles.getRoleById'), rolesController.getRoleById);
+  router.get('/roles/:id', authorize('roles.getRoleById'), rolesController.getRoleById);
   await registerAction('roles.getRoleById', 'Get a role');
   // ---------------------------------------------------------------------------
-  router.post('/', authorize('roles.createRole'), rolesController.createRole);
+  router.post('/roles/', authorize('roles.createRole'), rolesController.createRole);
   await registerAction('roles.createRole', 'Create a role');
   // ---------------------------------------------------------------------------
-  router.patch('/:id', authorize('roles.updateRole'), rolesController.updateRole);
+  router.patch('/roles/:id', authorize('roles.updateRole'), rolesController.updateRole);
   await registerAction('roles.updateRole', 'Update a role');
   // ---------------------------------------------------------------------------
-  router.delete('/:id', authorize('roles.deleteRole'), rolesController.deleteRole);
+  router.delete('/roles/:id', authorize('roles.deleteRole'), rolesController.deleteRole);
   await registerAction('roles.deleteRole', 'Delete a role');
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  app.use('/auth/roles', router);
+  return router;
 }

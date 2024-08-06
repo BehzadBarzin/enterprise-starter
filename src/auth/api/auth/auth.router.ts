@@ -1,4 +1,4 @@
-import express, { Application, Router } from 'express';
+import express, { Router } from 'express';
 
 import authorize from '../../middlewares/authorize';
 import { registerAction } from '../../utils/register-permission-action';
@@ -6,11 +6,9 @@ import { registerAction } from '../../utils/register-permission-action';
 import AuthController from './auth.controller';
 
 /**
- * Registers routes for auth API in the given Express application.
- *
- * @param app - The Express application instance.
+ * Get routes for auth API in the given Express application.
  */
-export async function registerAuthRouter(app: Application): Promise<void> {
+export async function getAuthRouter(): Promise<Router> {
   const router: Router = express.Router();
   const authController = new AuthController();
 
@@ -32,5 +30,5 @@ export async function registerAuthRouter(app: Application): Promise<void> {
   await registerAction('auth.me', 'Get me');
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  app.use('/auth', router);
+  return router;
 }

@@ -3,7 +3,7 @@ import 'express-async-errors'; // Must be imported at the beg
 
 // Make sure to import the env file first
 import './utils/env';
-import { registerAllAuthRoutes } from './auth/api';
+import { getAuthRoutes } from './auth/api';
 import { NotFoundError } from './errors/not-found.error';
 import { errorHandler } from './middlewares/error-handler.middleware';
 import { requestLogger } from './middlewares/request-logger.middleware';
@@ -33,7 +33,7 @@ export async function createServer() {
     throw new NotFoundError();
   });
 
-  await registerAllAuthRoutes(app);
+  app.use('/auth', await getAuthRoutes());
 
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------

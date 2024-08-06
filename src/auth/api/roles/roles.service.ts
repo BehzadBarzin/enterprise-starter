@@ -76,8 +76,7 @@ class RolesService {
   async deleteRole(id: number): Promise<Role> {
     const roleToDelete = await prisma.role.findFirst({ where: { id }, select: { id: true } });
     if (!roleToDelete) {
-      // ToDo: Replace this with custom Error class (404)
-      throw new Error(`Role not found, id: ${id}`);
+      throw new NotFoundError('Role Not Found');
     }
 
     return await prisma.role.delete({

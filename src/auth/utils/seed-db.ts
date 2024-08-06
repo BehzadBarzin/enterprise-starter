@@ -48,9 +48,14 @@ export async function seedAuthDB(): Promise<void> {
       password: await generateHash(process.env.SUPER_ADMIN_PASSWORD!),
       provider: EProviders.local,
       roles: {
-        connect: {
-          id: superAdminRole.id,
-        },
+        connect: [
+          {
+            id: superAdminRole.id,
+          },
+          {
+            id: authenticatedRole.id,
+          },
+        ],
       },
     },
   });

@@ -1,4 +1,4 @@
-import express, { Application, Router } from 'express';
+import express, { Router } from 'express';
 
 import authorize from '../../middlewares/authorize';
 import { registerAction } from '../../utils/register-permission-action';
@@ -6,23 +6,21 @@ import { registerAction } from '../../utils/register-permission-action';
 import PermissionsController from './permissions.controller';
 
 /**
- * Registers routes for permissions API in the given Express application.
- *
- * @param app - The Express application instance.
+ * Get routes for permissions API in the given Express application.
  */
-export async function registerPermissionsRouter(app: Application): Promise<void> {
+export async function getPermissionsRouter(): Promise<Router> {
   const router: Router = express.Router();
   const permissionsController = new PermissionsController();
 
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // RESTful routes
-  router.get('/', authorize('permissions.getAllPermissions'), permissionsController.getAllPermissions);
+  router.get('/permissions/', authorize('permissions.getAllPermissions'), permissionsController.getAllPermissions);
   await registerAction('permissions.getAllPermissions', 'Get all permissions');
   // ---------------------------------------------------------------------------
-  router.get('/:id', authorize('permissions.getPermissionById'), permissionsController.getPermissionById);
+  router.get('/permissions/:id', authorize('permissions.getPermissionById'), permissionsController.getPermissionById);
   await registerAction('permissions.getPermissionById', 'Get a permission');
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  app.use('/auth/permissions', router);
+  return router;
 }

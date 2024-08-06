@@ -1,16 +1,13 @@
-import express, { Application, Router } from 'express';
+import express, { Router } from 'express';
 
-import authorize from '../../middlewares/authorize';
 import { registerAction } from '../../utils/register-permission-action';
 
 import PasswordResetController from './password-reset.controller';
 
 /**
- * Registers routes for auth API in the given Express application.
- *
- * @param app - The Express application instance.
+ * Get routes for auth API in the given Express application.
  */
-export async function registerPasswordResetRouter(app: Application): Promise<void> {
+export async function getPasswordResetRouter(): Promise<Router> {
   const router: Router = express.Router();
   const passwordResetController = new PasswordResetController();
 
@@ -24,5 +21,5 @@ export async function registerPasswordResetRouter(app: Application): Promise<voi
   await registerAction('auth.reset-password', 'Reset password');
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  app.use('/auth', router);
+  return router;
 }
