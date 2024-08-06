@@ -10,6 +10,7 @@
     "db:push": "dotenv -e .env.dev -- prisma db push",
     "db:migrate": "dotenv -e .env.dev -- prisma migrate dev",
     "db:generate-client": "dotenv -e .env.dev -- prisma generate",
+    "db:studio": "dotenv -e .env.dev -- prisma studio",
     "lint:fix": "eslint --fix ./src"
   },
   "keywords": [],
