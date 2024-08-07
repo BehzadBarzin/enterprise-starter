@@ -1,8 +1,5 @@
 import express, { Router } from 'express';
 
-import authorize from '../../middlewares/authorize';
-import { registerAction } from '../../utils/register-permission-action';
-
 import PermissionsController from './permissions.controller';
 
 /**
@@ -15,11 +12,9 @@ export async function getPermissionsRouter(): Promise<Router> {
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // RESTful routes
-  router.get('/permissions/', authorize('permissions.getAllPermissions'), permissionsController.getAllPermissions);
-  await registerAction('permissions.getAllPermissions', 'Get all permissions');
+  router.get('/permissions/', permissionsController.getAllPermissions);
   // ---------------------------------------------------------------------------
-  router.get('/permissions/:id', authorize('permissions.getPermissionById'), permissionsController.getPermissionById);
-  await registerAction('permissions.getPermissionById', 'Get a permission');
+  router.get('/permissions/:id', permissionsController.getPermissionById);
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   return router;

@@ -3,6 +3,7 @@ import { Request, RequestHandler, Response } from 'express';
 import { IdParamsDTO } from '../../../common/dtos/id-params.dto';
 import { validateBody } from '../../../middlewares/validate-body.middleware';
 import { validateParams } from '../../../middlewares/validate-params.middleware';
+import { Authorize } from '../../decorators/authorize.decorator';
 
 import { CreateUserBodyDTO } from './dtos/create-user-body.dto';
 import { UpdateUserBodyDTO } from './dtos/update-user-body.dto';
@@ -17,6 +18,7 @@ class UsersController {
   }
 
   // ---------------------------------------------------------------------------
+  @Authorize('users.getAllUsers')
   getAllUsers: RequestHandler[] = [
     async (req: Request, res: Response) => {
       const users = await this.usersService.getAllUsers();
@@ -26,6 +28,7 @@ class UsersController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('users.getUserById')
   getUserById: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),
@@ -39,6 +42,7 @@ class UsersController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('users.createUser')
   createUser: RequestHandler[] = [
     // Validate body
     validateBody(CreateUserBodyDTO),
@@ -51,6 +55,7 @@ class UsersController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('users.updateUser')
   updateUser: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),
@@ -67,6 +72,7 @@ class UsersController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('users.deleteUser')
   deleteUser: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),

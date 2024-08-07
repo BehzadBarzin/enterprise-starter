@@ -1,6 +1,7 @@
-import { Request, RequestHandler, Response } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 import { validateBody } from '../../../middlewares/validate-body.middleware';
+import { Authorize } from '../../decorators/authorize.decorator';
 import { UnauthenticatedError } from '../../errors/unauthenticated.error';
 
 import AuthService from './auth.service';
@@ -40,6 +41,8 @@ class AuthController {
   ];
 
   // ---------------------------------------------------------------------------
+  // Because we are using the refresh token in this route, we'll handle token
+  // verification manually in the handler and not the authorize middleware
   refresh: RequestHandler[] = [
     async (req: Request, res: Response) => {
       // Manually extract the refresh token from header
@@ -62,6 +65,7 @@ class AuthController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize() // Not passing permission action name will check ONLY for authentication
   me: RequestHandler[] = [
     async (req: Request, res: Response) => {
       const user = await this.authService.me(req.userId!);

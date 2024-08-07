@@ -3,6 +3,7 @@ import { Request, RequestHandler, Response } from 'express';
 import { IdParamsDTO } from '../../../common/dtos/id-params.dto';
 import { validateBody } from '../../../middlewares/validate-body.middleware';
 import { validateParams } from '../../../middlewares/validate-params.middleware';
+import { Authorize } from '../../decorators/authorize.decorator';
 
 import { CreateRoleBodyDTO } from './dtos/create-role-body.dto';
 import { UpdateRoleBodyDTO } from './dtos/update-role-body.dto';
@@ -17,6 +18,7 @@ class RolesController {
   }
 
   // ---------------------------------------------------------------------------
+  @Authorize('roles.getAllRoles')
   getAllRoles: RequestHandler[] = [
     async (req: Request, res: Response) => {
       const roles = await this.rolesService.getAllRoles();
@@ -26,6 +28,7 @@ class RolesController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('roles.getRoleById')
   getRoleById: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),
@@ -40,6 +43,7 @@ class RolesController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('roles.createRole')
   createRole: RequestHandler[] = [
     // Validate body
     validateBody(CreateRoleBodyDTO),
@@ -52,6 +56,7 @@ class RolesController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('roles.updateRole')
   updateRole: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),
@@ -67,6 +72,7 @@ class RolesController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('roles.deleteRole')
   deleteRole: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),

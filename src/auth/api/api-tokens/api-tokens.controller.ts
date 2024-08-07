@@ -3,6 +3,7 @@ import { Request, RequestHandler, Response } from 'express';
 import { IdParamsDTO } from '../../../common/dtos/id-params.dto';
 import { validateBody } from '../../../middlewares/validate-body.middleware';
 import { validateParams } from '../../../middlewares/validate-params.middleware';
+import { Authorize } from '../../decorators/authorize.decorator';
 
 import ApiTokensService from './api-tokens.service';
 import { IssueTokenBodyDTO } from './dtos/issue-token-body.dto';
@@ -16,6 +17,7 @@ class ApiTokensController {
   }
 
   // ---------------------------------------------------------------------------
+  @Authorize('apiTokens.getAllApiTokensOfUser')
   getAllApiTokensOfUser: RequestHandler[] = [
     async (req: Request, res: Response) => {
       const apiTokens = await this.apiTokensService.getAllApiTokensOfUser(req.userId!);
@@ -25,6 +27,7 @@ class ApiTokensController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('apiTokens.getApiTokenById')
   getApiTokenById: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),
@@ -39,6 +42,7 @@ class ApiTokensController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('apiTokens.issueToken')
   issueToken: RequestHandler[] = [
     // Validate body
     validateBody(IssueTokenBodyDTO),
@@ -51,6 +55,7 @@ class ApiTokensController {
   ];
 
   // ---------------------------------------------------------------------------
+  @Authorize('apiTokens.revokeToken')
   revokeToken: RequestHandler[] = [
     // Validate :id param
     validateParams(IdParamsDTO),

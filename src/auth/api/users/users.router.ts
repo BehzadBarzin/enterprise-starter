@@ -1,8 +1,5 @@
 import express, { Router } from 'express';
 
-import authorize from '../../middlewares/authorize';
-import { registerAction } from '../../utils/register-permission-action';
-
 import UsersController from './users.controller';
 
 /**
@@ -15,20 +12,15 @@ export async function getUsersRouter(): Promise<Router> {
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // RESTful routes
-  router.get('/users/', authorize('users.getAllUsers'), usersController.getAllUsers);
-  await registerAction('users.getAllUsers', 'Get all users');
+  router.get('/users/', usersController.getAllUsers);
   // ---------------------------------------------------------------------------
-  router.get('/users/:id', authorize('users.getUserById'), usersController.getUserById);
-  await registerAction('users.getUserById', 'Get a user');
+  router.get('/users/:id', usersController.getUserById);
   // ---------------------------------------------------------------------------
-  router.post('/users/', authorize('users.createUser'), usersController.createUser);
-  await registerAction('users.createUser', 'Create a user');
+  router.post('/users/', usersController.createUser);
   // ---------------------------------------------------------------------------
-  router.patch('/users/:id', authorize('users.updateUser'), usersController.updateUser);
-  await registerAction('users.updateUser', 'Update a user');
+  router.patch('/users/:id', usersController.updateUser);
   // ---------------------------------------------------------------------------
-  router.delete('/users/:id', authorize('users.deleteUser'), usersController.deleteUser);
-  await registerAction('users.deleteUser', 'Delete a user');
+  router.delete('/users/:id', usersController.deleteUser);
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   return router;
