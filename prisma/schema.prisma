@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -27,7 +31,8 @@ model User {
   roles                Role[] @relation("UserRoles") // Many-to-Many
   apiTokens ApiToken[]
   passwordResetTokens PasswordResetToken[]
-  
+  // Api
+  products Product[]
   
   @@map("users")
 }
@@ -92,3 +97,16 @@ model ApiToken {
 // =============================================================================
 // API Tables
 // =============================================================================
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
+
+  @@map("products")
+}

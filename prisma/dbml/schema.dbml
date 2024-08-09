@@ -1,0 +1,96 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id Int [pk, increment]
+  email String [unique, not null]
+  provider String [not null]
+  password String
+  confirmationToken String
+  confirmed Boolean [not null, default: false]
+  blocked Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  roles roles [not null]
+  apiTokens api_tokens [not null]
+  passwordResetTokens password_reset_tokens [not null]
+  products products [not null]
+}
+
+Table password_reset_tokens {
+  id Int [pk, increment]
+  token String [unique, not null]
+  expiration DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userId Int [not null]
+  user users [not null]
+}
+
+Table roles {
+  id Int [pk, increment]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  users users [not null]
+  permissions permissions [not null]
+}
+
+Table permissions {
+  id Int [pk, increment]
+  action String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  roles roles [not null]
+  apiTokens api_tokens [not null]
+}
+
+Table api_tokens {
+  id Int [pk, increment]
+  name String [not null]
+  description String
+  fullAccess Boolean [not null, default: false]
+  token String [unique, not null]
+  lastUsedAt DateTime
+  expiresAt DateTime
+  hide Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  permissions permissions [not null]
+  userId Int [not null]
+  user users [not null]
+}
+
+Table products {
+  id Int [pk, increment]
+  name String [not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userId Int [not null]
+  user users [not null]
+}
+
+Table UserRoles {
+  rolesId Int [ref: > roles.id]
+  usersId Int [ref: > users.id]
+}
+
+Table RolePermissions {
+  permissionsId Int [ref: > permissions.id]
+  rolesId Int [ref: > roles.id]
+}
+
+Table ApiTokenPermissions {
+  apitokensId Int [ref: > api_tokens.id]
+  permissionsId Int [ref: > permissions.id]
+}
+
+Ref: password_reset_tokens.userId > users.id
+
+Ref: api_tokens.userId > users.id
+
+Ref: products.userId > users.id
